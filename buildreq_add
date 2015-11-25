@@ -1,0 +1,15 @@
+# This file contains additional build requirements that did not get
+# picked up automatically. One name per line, no whitespace.
+bison
+docbook-xml
+curl-dev
+flex
+gmp-dev
+libcap-ng-dev
+libevent-dev
+libxml2-dev
+libxslt-bin
+Linux-PAM-dev
+unbound-dev
+util-linux
+xmlto
