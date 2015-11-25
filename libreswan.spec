@@ -4,7 +4,7 @@
 #
 Name     : libreswan
 Version  : 3.15
-Release  : 4
+Release  : 5
 URL      : https://download.libreswan.org/libreswan-3.15.tar.gz
 Source0  : https://download.libreswan.org/libreswan-3.15.tar.gz
 Summary  : Libreswan IPSEC implementation
@@ -74,11 +74,11 @@ doc components for the libreswan package.
 %setup -q -n libreswan-3.15
 
 %build
-make V=1  %{?_smp_mflags} INC_USRLOCAL=/usr INC_MANDIR=share/man
+make V=1  %{?_smp_mflags} INC_USRLOCAL=/usr INC_MANDIR=share/man FINALSBINDIR=/bin
 
 %install
 rm -rf %{buildroot}
-%make_install INC_USRLOCAL=/usr INC_MANDIR=share/man
+%make_install INC_USRLOCAL=/usr INC_MANDIR=share/man FINALSBINDIR=/bin
 
 %files
 %defattr(-,root,root,-)
