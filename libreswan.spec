@@ -4,7 +4,7 @@
 #
 Name     : libreswan
 Version  : 3.15
-Release  : 5
+Release  : 6
 URL      : https://download.libreswan.org/libreswan-3.15.tar.gz
 Source0  : https://download.libreswan.org/libreswan-3.15.tar.gz
 Summary  : Libreswan IPSEC implementation
@@ -30,6 +30,7 @@ BuildRequires : systemd-dev
 BuildRequires : unbound-dev
 BuildRequires : util-linux
 BuildRequires : xmlto
+Patch1: 0001-ipsec-custom-directory-not-recognized-github-issue-4.patch
 
 %description
 Libreswan is a free implementation of IPSEC & IKE for Linux.  IPSEC is
@@ -72,6 +73,7 @@ doc components for the libreswan package.
 
 %prep
 %setup -q -n libreswan-3.15
+%patch1 -p1
 
 %build
 make V=1  %{?_smp_mflags} INC_USRLOCAL=/usr INC_MANDIR=share/man FINALSBINDIR=/bin
