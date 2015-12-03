@@ -1,0 +1,34 @@
+From e493bd88ae80727337f982c2cec4dd0f2986125d Mon Sep 17 00:00:00 2001
+From: Alberto Murillo <alberto.murillo.silva@intel.com>
+Date: Mon, 7 Dec 2015 11:12:36 -0600
+Subject: [PATCH] stateless
+
+---
+ initsystems/systemd/ipsec.service.in | 2 +-
+ ipsec.conf                           | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+ create mode 100644 ipsec.conf
+
+diff --git a/initsystems/systemd/ipsec.service.in b/initsystems/systemd/ipsec.service.in
+index 53a690b..7daefe3 100644
+--- a/initsystems/systemd/ipsec.service.in
++++ b/initsystems/systemd/ipsec.service.in
+@@ -8,7 +8,7 @@ Type=simple
+ Restart=always
+ # backwards compatible with plutorestartoncrash=no
+ #RestartPreventExitStatus=137 143 SIGTERM SIGKILL
+-EnvironmentFile=-@FINALSYSCONFDIR@/sysconfig/pluto
++EnvironmentFile=-@FINALSYSCONFDIR@/pluto
+ #Environment=IPSEC_SBINDIR=@FINALSBINDIR@
+ #Environment=IPSEC_EXECDIR=@FINALSBINDIR@/ipsec
+ #PIDFile=@FINALVARDIR@/run/pluto/pluto.pid
+diff --git a/ipsec.conf b/ipsec.conf
+new file mode 100644
+index 0000000..c028390
+--- /dev/null
++++ b/ipsec.conf
+@@ -0,0 +1 @@
++include /etc/ipsec.conf
+-- 
+2.1.0
+

@@ -1,0 +1,2 @@
+install -d -m 755 %{buildroot}/usr/share/defaults/libreswan
+install -p -D -m 644 ipsec.conf %{buildroot}/usr/share/defaults/libreswan
