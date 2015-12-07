@@ -4,13 +4,14 @@
 #
 Name     : libreswan
 Version  : 3.15
-Release  : 6
+Release  : 7
 URL      : https://download.libreswan.org/libreswan-3.15.tar.gz
 Source0  : https://download.libreswan.org/libreswan-3.15.tar.gz
 Summary  : Libreswan IPSEC implementation
 Group    : Development/Tools
 License  : GPL-2.0 LGPL-2.0 OpenSSL
 Requires: libreswan-bin
+Requires: libreswan-data
 Requires: libreswan-doc
 Requires: libreswan-config
 BuildRequires : Linux-PAM-dev
@@ -30,7 +31,8 @@ BuildRequires : systemd-dev
 BuildRequires : unbound-dev
 BuildRequires : util-linux
 BuildRequires : xmlto
-Patch1: 0001-ipsec-custom-directory-not-recognized-github-issue-4.patch
+Patch1: 0001-stateless.patch
+Patch2: 0001-ipsec-custom-directory-not-recognized-github-issue-4.patch
 
 %description
 Libreswan is a free implementation of IPSEC & IKE for Linux.  IPSEC is
@@ -49,6 +51,7 @@ IPsec stack that exists in the default Linux kernel.
 %package bin
 Summary: bin components for the libreswan package.
 Group: Binaries
+Requires: libreswan-data
 Requires: libreswan-config
 
 %description bin
@@ -63,6 +66,14 @@ Group: Default
 config components for the libreswan package.
 
 
+%package data
+Summary: data components for the libreswan package.
+Group: Data
+
+%description data
+data components for the libreswan package.
+
+
 %package doc
 Summary: doc components for the libreswan package.
 Group: Documentation
@@ -74,13 +85,18 @@ doc components for the libreswan package.
 %prep
 %setup -q -n libreswan-3.15
 %patch1 -p1
+%patch2 -p1
 
 %build
-make V=1  %{?_smp_mflags} INC_USRLOCAL=/usr INC_MANDIR=share/man FINALSBINDIR=/bin
+make V=1  %{?_smp_mflags} INC_USRLOCAL=/usr INC_MANDIR=share/man FINALSBINDIR=/bin FINALCONFFILE=/usr/share/defaults/libreswan/ipsec.conf
 
 %install
 rm -rf %{buildroot}
-%make_install INC_USRLOCAL=/usr INC_MANDIR=share/man FINALSBINDIR=/bin
+%make_install INC_USRLOCAL=/usr INC_MANDIR=share/man FINALSBINDIR=/bin FINALCONFFILE=/usr/share/defaults/libreswan/ipsec.conf
+## make_install_append content
+install -d -m 755 %{buildroot}/usr/share/defaults/libreswan
+install -p -D -m 644 ipsec.conf %{buildroot}/usr/share/defaults/libreswan
+## make_install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -121,6 +137,10 @@ rm -rf %{buildroot}
 %files config
 %defattr(-,root,root,-)
 /usr/lib/systemd/system/ipsec.service
+
+%files data
+%defattr(-,root,root,-)
+/usr/share/defaults/libreswan/ipsec.conf
 
 %files doc
 %defattr(-,root,root,-)
