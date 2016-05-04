@@ -4,7 +4,7 @@
 #
 Name     : libreswan
 Version  : 3.17
-Release  : 11
+Release  : 12
 URL      : https://download.libreswan.org/libreswan-3.17.tar.gz
 Source0  : https://download.libreswan.org/libreswan-3.17.tar.gz
 Summary  : Libreswan IPSEC implementation
@@ -32,6 +32,7 @@ BuildRequires : unbound-dev
 BuildRequires : util-linux
 BuildRequires : xmlto
 Patch1: 0001-stateless.patch
+Patch2: 0002-gcc6.patch
 
 %description
 Libreswan is a free implementation of IPSEC & IKE for Linux.  IPSEC is
@@ -82,8 +83,10 @@ doc components for the libreswan package.
 
 
 %prep
+cd ..
 %setup -q -n libreswan-3.17
 %patch1 -p1
+%patch2 -p1
 
 %build
 make V=1  %{?_smp_mflags} INC_USRLOCAL=/usr INC_MANDIR=share/man FINALSBINDIR=/bin FINALCONFFILE=/usr/share/defaults/libreswan/ipsec.conf
