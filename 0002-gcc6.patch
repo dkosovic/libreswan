@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+index 6f7dbf2..45f5d17 100644
+--- a/Makefile
++++ b/Makefile
+@@ -22,6 +22,9 @@ endif
+ LIBRESWANSRCDIR?=$(shell pwd)
+ export LIBRESWANSRCDIR
+ 
++export CFLAGS += -Wno-error=unused-const-variable
++export CXXFLAGS += -Wno-error=unused-const-variable
++
+ TERMCAP=
+ export TERMCAP
+ 
