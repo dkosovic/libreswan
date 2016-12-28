@@ -4,7 +4,7 @@
 #
 Name     : libreswan
 Version  : 3.17
-Release  : 13
+Release  : 14
 URL      : https://download.libreswan.org/libreswan-3.17.tar.gz
 Source0  : https://download.libreswan.org/libreswan-3.17.tar.gz
 Summary  : Libreswan IPSEC implementation
