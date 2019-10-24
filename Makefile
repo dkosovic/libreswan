@@ -1,5 +1,5 @@
 PKG_NAME := libreswan
-URL := https://download.libreswan.org/libreswan-3.17.tar.gz
-ARCHIVES :=
+URL = https://github.com/libreswan/libreswan/archive/v3.29.tar.gz
+ARCHIVES = 
 
 include ../common/Makefile.common

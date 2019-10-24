@@ -1,0 +1,11 @@
+3.29
+Linux-PAM-dev
+bison
+curl-dev
+libcap-ng-dev
+libxml2-dev
+libxslt-bin
+pkgconfig(nss)
+systemd-dev
+util-linux
+xmlto

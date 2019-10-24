@@ -1,0 +1,57 @@
+From 1a7a08477af4c084aa1ccc6771646018f07aec8c Mon Sep 17 00:00:00 2001
+From: Auke Kok <auke-jan.h.kok@intel.com>
+Date: Thu, 24 Oct 2019 10:50:16 -0700
+Subject: [PATCH] Set default options since passing them later doesn't work.
+
+---
+ mk/config.mk         | 6 +++---
+ mk/defaults/linux.mk | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/mk/config.mk b/mk/config.mk
+index fcb3286..1ac0295 100644
+--- a/mk/config.mk
++++ b/mk/config.mk
+@@ -83,7 +83,7 @@ include ${LIBRESWANSRCDIR}/mk/defaults/${BUILDENV}.mk
+ DESTDIR?=
+ 
+ # "local" part of tree, used in building other pathnames
+-INC_USRLOCAL?=/usr/local
++INC_USRLOCAL?=/usr
+ 
+ # PUBDIR is where the "ipsec" command goes; beware, many things define PATH
+ # settings which are assumed to include PUBDIR (or at least, to include *some*
+@@ -107,7 +107,7 @@ SBINDIR?=$(DESTDIR)$(FINALSBINDIR)
+ 
+ # where the appropriate manpage tree is located
+ # location within INC_USRLOCAL
+-INC_MANDIR?=man
++INC_MANDIR?=share/man
+ FINALMANDIR=$(INC_USRLOCAL)/$(INC_MANDIR)
+ # the full pathname
+ MANTREE?=$(DESTDIR)$(FINALMANDIR)
+@@ -339,7 +339,7 @@ POD2MAN?=$(shell which pod2man | grep / | head -n1)
+ #       you may or maynot have
+ 
+ # Enable support for DNSSEC. This requires the unbound and ldns libraries.
+-USE_DNSSEC?=true
++USE_DNSSEC?=false
+ 
+ # For systemd start/stop notifications and watchdog feature
+ # We only enable this by default if used INITSYSTEM is systemd
+diff --git a/mk/defaults/linux.mk b/mk/defaults/linux.mk
+index 8f43a48..3b62ab4 100644
+--- a/mk/defaults/linux.mk
++++ b/mk/defaults/linux.mk
+@@ -26,7 +26,7 @@ PORTDEFINE=-DSCANDIR_HAS_CONST
+ 
+ BISONOSFLAGS=-g --verbose
+ 
+-USE_LABELED_IPSEC?=true
++USE_LABELED_IPSEC?=false
+ 
+ # Detect linux variants and releases.
+ 
+-- 
+2.23.0
+
