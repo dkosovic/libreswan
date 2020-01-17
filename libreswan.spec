@@ -4,7 +4,7 @@
 #
 Name     : libreswan
 Version  : 3.29
-Release  : 15
+Release  : 16
 URL      : https://github.com/libreswan/libreswan/archive/v3.29.tar.gz
 Source0  : https://github.com/libreswan/libreswan/archive/v3.29.tar.gz
 Summary  : Libreswan IPSEC implementation
