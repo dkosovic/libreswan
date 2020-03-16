@@ -1,15 +1,15 @@
-From 1a7a08477af4c084aa1ccc6771646018f07aec8c Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Auke Kok <auke-jan.h.kok@intel.com>
 Date: Thu, 24 Oct 2019 10:50:16 -0700
 Subject: [PATCH] Set default options since passing them later doesn't work.
 
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
 ---
- mk/config.mk         | 6 +++---
- mk/defaults/linux.mk | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ mk/config.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/mk/config.mk b/mk/config.mk
-index fcb3286..1ac0295 100644
+index 5d01606..7b1a825 100644
 --- a/mk/config.mk
 +++ b/mk/config.mk
 @@ -83,7 +83,7 @@ include ${LIBRESWANSRCDIR}/mk/defaults/${BUILDENV}.mk
@@ -30,7 +30,7 @@ index fcb3286..1ac0295 100644
  FINALMANDIR=$(INC_USRLOCAL)/$(INC_MANDIR)
  # the full pathname
  MANTREE?=$(DESTDIR)$(FINALMANDIR)
-@@ -339,7 +339,7 @@ POD2MAN?=$(shell which pod2man | grep / | head -n1)
+@@ -341,7 +341,7 @@ POD2MAN?=$(shell which pod2man | grep / | head -n1)
  #       you may or maynot have
  
  # Enable support for DNSSEC. This requires the unbound and ldns libraries.
@@ -39,19 +39,3 @@ index fcb3286..1ac0295 100644
  
  # For systemd start/stop notifications and watchdog feature
  # We only enable this by default if used INITSYSTEM is systemd
-diff --git a/mk/defaults/linux.mk b/mk/defaults/linux.mk
-index 8f43a48..3b62ab4 100644
---- a/mk/defaults/linux.mk
-+++ b/mk/defaults/linux.mk
-@@ -26,7 +26,7 @@ PORTDEFINE=-DSCANDIR_HAS_CONST
- 
- BISONOSFLAGS=-g --verbose
- 
--USE_LABELED_IPSEC?=true
-+USE_LABELED_IPSEC?=false
- 
- # Detect linux variants and releases.
- 
--- 
-2.23.0
-
