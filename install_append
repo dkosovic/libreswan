@@ -1,0 +1,9 @@
+install -d %{buildroot}/usr/lib/sysctl.d
+install -m 0644 packaging/rhel/libreswan-sysctl.conf \
+    %{buildroot}/usr/lib/sysctl.d/50-libreswan.conf
+
+echo "include /etc/ipsec.d/*.secrets" \
+    > %{buildroot}/usr/share/defaults/libreswan/ipsec.secrets
+
+echo "include /run/pluto/*.secrets" \
+    > %{buildroot}/usr/share/defaults/libreswan/ipsec.secrets

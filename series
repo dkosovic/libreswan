@@ -1,1 +1,5 @@
-0001-Set-default-options-since-passing-them-later-doesn-t.patch
+0001-ipsec.d.patch
+0001-NSS_PKCS11_2_0_COMPAT-libreswan-3.22.patch
+0001-pam.d.patch
+0001-resolv.conf.patch
+0001-update-README.nss-to-match-clearlinux.patch

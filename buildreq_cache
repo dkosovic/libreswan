@@ -1,3 +1,4 @@
 3.32
 bison
+openldap-dev
 pkgconfig(nss)

@@ -1,1 +1,9 @@
-PREFIX=/usr DESTDIR=%{buildroot}
+PREFIX=/usr
+FINALEXAMPLECONFDIR=/usr/share/doc/libreswan/examples
+FINALLIBEXECDIR=/usr/libexec/ipsec
+FINALMANDIR=/usr/share/man
+FINALNSSDIR=/var/lib/ipsec/nss
+FINALSBINDIR=/usr/sbin
+FINALSYSCONFDIR=/usr/share/defaults/libreswan
+USE_DNSSEC=false
+install

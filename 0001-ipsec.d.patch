@@ -1,0 +1,21 @@
+From 55deab58dc94e9c332a2d9d85b02613bad4babac Mon Sep 17 00:00:00 2001
+From: dkosovic <doug@uq.edu.au>
+Date: Tue, 30 Jun 2020 08:50:00 +1000
+Subject: [PATCH] ipsec.d
+
+include /etc/ipsec.d/ instead of @IPSEC_CONFDDIR@/*.conf in
+/usr/share/defaults/etc/ipsec.conf
+
+---
+diff --git a/programs/configs/ipsec.conf.in b/programs/configs/ipsec.conf.in
+index d158be5052..cc841fead2 100644
+--- a/programs/configs/ipsec.conf.in
++++ b/programs/configs/ipsec.conf.in
+@@ -24,5 +24,5 @@ config setup
+ # if it exists, include system wide crypto-policy defaults
+ # include /etc/crypto-policies/back-ends/libreswan.config
+ 
+-# It is best to add your IPsec connections as separate files in @IPSEC_CONFDDIR@/
+-include @IPSEC_CONFDDIR@/*.conf
++# It is best to add your IPsec connections as separate files in /etc/ipsec.d/
++include /etc/ipsec.d/*.conf

@@ -1,0 +1,27 @@
+From 4cf68a9a772e669a8904c18277bab8ff60f1fae9 Mon Sep 17 00:00:00 2001
+From: dkosovic <doug@uq.edu.au>
+Date: Tue, 30 Jun 2020 08:40:00 +1000
+Subject: [PATCH] resolv.conf
+
+Use /etc/resolv.conf instead of @FINALSYSCONFDIR@/resolv.conf
+
+---
+ programs/setup/setup.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/programs/setup/setup.in b/programs/setup/setup.in
+index be23a68286..183c337acf 100755
+--- a/programs/setup/setup.in
++++ b/programs/setup/setup.in
+@@ -26,7 +26,7 @@ cd /
+ 
+ #/etc/resolv.conf related paths
+ LIBRESWAN_RESOLV_CONF=${rundir}/libreswan-resolv-conf-backup
+-ORIG_RESOLV_CONF=@FINALSYSCONFDIR@/resolv.conf
++ORIG_RESOLV_CONF=/etc/resolv.conf
+ 
+ initsystem="@INITSYSTEM@"
+ 
+-- 
+2.25.1
+

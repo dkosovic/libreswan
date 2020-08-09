@@ -4,14 +4,16 @@
 #
 Name     : libreswan
 Version  : 3.32
-Release  : 18
+Release  : 19
 URL      : https://github.com/libreswan/libreswan/archive/v3.32/libreswan-3.32.tar.gz
 Source0  : https://github.com/libreswan/libreswan/archive/v3.32/libreswan-3.32.tar.gz
+Source1  : libreswan.tmpfiles
 Summary  : Libreswan IPSEC implementation
 Group    : Development/Tools
 License  : BSD-3-Clause BSD-4-Clause GPL-2.0 LGPL-2.0 LGPL-2.1 MPL-2.0 OpenSSL
 Requires: libreswan-bin = %{version}-%{release}
 Requires: libreswan-config = %{version}-%{release}
+Requires: libreswan-data = %{version}-%{release}
 Requires: libreswan-libexec = %{version}-%{release}
 Requires: libreswan-license = %{version}-%{release}
 Requires: libreswan-man = %{version}-%{release}
@@ -23,12 +25,19 @@ BuildRequires : flex
 BuildRequires : libcap-ng-dev
 BuildRequires : libxml2-dev
 BuildRequires : libxslt-bin
+BuildRequires : openldap-dev
+BuildRequires : pkgconfig(audit)
 BuildRequires : pkgconfig(libcurl)
 BuildRequires : pkgconfig(libevent)
+BuildRequires : pkgconfig(libseccomp)
 BuildRequires : pkgconfig(libsystemd)
 BuildRequires : pkgconfig(nss)
 BuildRequires : xmlto
-Patch1: 0001-Set-default-options-since-passing-them-later-doesn-t.patch
+Patch1: 0001-ipsec.d.patch
+Patch2: 0001-NSS_PKCS11_2_0_COMPAT-libreswan-3.22.patch
+Patch3: 0001-pam.d.patch
+Patch4: 0001-resolv.conf.patch
+Patch5: 0001-update-README.nss-to-match-clearlinux.patch
 
 %description
 Libreswan is a free implementation of IPSEC & IKE for Linux.  IPSEC is
@@ -47,6 +56,7 @@ IPsec stack that exists in the default Linux kernel.
 %package bin
 Summary: bin components for the libreswan package.
 Group: Binaries
+Requires: libreswan-data = %{version}-%{release}
 Requires: libreswan-libexec = %{version}-%{release}
 Requires: libreswan-config = %{version}-%{release}
 Requires: libreswan-license = %{version}-%{release}
@@ -62,6 +72,14 @@ Group: Default
 
 %description config
 config components for the libreswan package.
+
+
+%package data
+Summary: data components for the libreswan package.
+Group: Data
+
+%description data
+data components for the libreswan package.
 
 
 %package doc
@@ -111,26 +129,48 @@ services components for the libreswan package.
 %setup -q -n libreswan-3.32
 cd %{_builddir}/libreswan-3.32
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1596500176
+export SOURCE_DATE_EPOCH=1596944192
 export GCC_IGNORE_WERROR=1
-export AR=gcc-ar
-export RANLIB=gcc-ranlib
-export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
-make  %{?_smp_mflags}  programs
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+make  %{?_smp_mflags}  PREFIX=/usr \
+FINALEXAMPLECONFDIR=/usr/share/doc/libreswan/examples \
+FINALLIBEXECDIR=/usr/libexec/ipsec \
+FINALMANDIR=/usr/share/man \
+FINALNSSDIR=/var/lib/ipsec/nss \
+FINALSBINDIR=/usr/sbin \
+FINALSYSCONFDIR=/usr/share/defaults/libreswan \
+INITSYSTEM=systemd \
+USE_DH2=true \
+USE_DNSSEC=false \
+USE_FIPSCHECK=false \
+USE_LABELED_IPSEC=false \
+USE_LDAP=true \
+USE_LIBCAP_NG=true \
+USE_LIBCURL=true \
+USE_LINUX_AUDIT=true \
+USE_NM=true \
+USE_NSS_IPSEC_PROFILE=true \
+USE_NSS_PRF=true \
+USE_SECCOMP=true \
+USE_XAUTHPAM=true \
+programs
 
 
 %install
-export SOURCE_DATE_EPOCH=1596500176
+export SOURCE_DATE_EPOCH=1596944192
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libreswan
 cp %{_builddir}/libreswan-3.32/COPYING %{buildroot}/usr/share/package-licenses/libreswan/4cc77b90af91e615a64ae04893fdffa7939db84c
@@ -139,18 +179,52 @@ cp %{_builddir}/libreswan-3.32/contrib/labeled-ipsec/LICENSE %{buildroot}/usr/sh
 cp %{_builddir}/libreswan-3.32/lib/COPYING.LIB %{buildroot}/usr/share/package-licenses/libreswan/ba8966e2473a9969bdcab3dc82274c817cfd98a1
 cp %{_builddir}/libreswan-3.32/linux/net/ipsec/des/COPYRIGHT %{buildroot}/usr/share/package-licenses/libreswan/217c26bb3710d0a31c53216a5155e43b601241f6
 cp %{_builddir}/libreswan-3.32/packaging/debian/copyright %{buildroot}/usr/share/package-licenses/libreswan/18f7f90b5c898ff666725515188844f6cb129758
-%make_install PREFIX=/usr DESTDIR=%{buildroot}
+make DESTDIR=%{buildroot} PREFIX=/usr \
+FINALEXAMPLECONFDIR=/usr/share/doc/libreswan/examples \
+FINALLIBEXECDIR=/usr/libexec/ipsec \
+FINALMANDIR=/usr/share/man \
+FINALNSSDIR=/var/lib/ipsec/nss \
+FINALSBINDIR=/usr/sbin \
+FINALSYSCONFDIR=/usr/share/defaults/libreswan \
+USE_DNSSEC=false \
+install
+mkdir -p %{buildroot}/usr/lib/tmpfiles.d
+install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/tmpfiles.d/libreswan.conf
+## install_append content
+install -d %{buildroot}/usr/lib/sysctl.d
+install -m 0644 packaging/rhel/libreswan-sysctl.conf \
+%{buildroot}/usr/lib/sysctl.d/50-libreswan.conf
+
+echo "include /etc/ipsec.d/*.secrets" \
+> %{buildroot}/usr/share/defaults/libreswan/ipsec.secrets
+
+echo "include /run/pluto/*.secrets" \
+> %{buildroot}/usr/share/defaults/libreswan/ipsec.secrets
+## install_append end
 
 %files
 %defattr(-,root,root,-)
 
 %files bin
 %defattr(-,root,root,-)
-/usr/bin/ipsec
+/usr/sbin/ipsec
 
 %files config
 %defattr(-,root,root,-)
+/usr/lib/sysctl.d/50-libreswan.conf
 /usr/lib/tmpfiles.d/libreswan.conf
+
+%files data
+%defattr(-,root,root,-)
+%attr(0600,root,root) /usr/share/defaults/libreswan/ipsec.d/policies/block
+%attr(0600,root,root) /usr/share/defaults/libreswan/ipsec.d/policies/clear
+%attr(0600,root,root) /usr/share/defaults/libreswan/ipsec.d/policies/clear-or-private
+%attr(0600,root,root) /usr/share/defaults/libreswan/ipsec.d/policies/portexcludes.conf
+%attr(0600,root,root) /usr/share/defaults/libreswan/ipsec.d/policies/private
+%attr(0600,root,root) /usr/share/defaults/libreswan/ipsec.d/policies/private-or-clear
+%attr(0600,root,root) /usr/share/defaults/libreswan/ipsec.secrets
+%attr(0644,root,root) /usr/share/defaults/libreswan/ipsec.conf
+/usr/share/pam.d/pluto
 
 %files doc
 %defattr(0644,root,root,0755)
